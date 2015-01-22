@@ -3,6 +3,6 @@
 
 可以再用 pm2 来启动服务器，然后设置 crontab：
 
-    0 3 * * * /usr/bin/python /home/ubuntu/genpac/genpac -p "{{PROXY}}" --output=/home/ubuntu/pac-server/pac.js && /home/ubuntu/.nvm/versions/io.js/v1.0.3/bin/pm2 reload pac
+    0 3 * * * /usr/bin/python /home/ubuntu/genpac/genpac -p "{{PROXY}}" --output=/home/ubuntu/pac-server/pac.js && /home/ubuntu/.nvm/versions/io.js/v1.0.3/bin/iojs /home/ubuntu/.nvm/versions/io.js/v1.0.3/bin/pm2 reload pac
 
 这样
