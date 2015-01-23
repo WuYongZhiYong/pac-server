@@ -11,7 +11,9 @@ additional = fs.readFileSync(__dirname + '/additional_rules', 'utf-8')
     .toString('utf-8')
     .split('\n')
     .filter(Boolean)
-rules = JSON.stringify(gfwlist.concat(additional), null, '    ');
+require! \./b64
+
+rules = 'JSON.parse(' + b64.decode.toString() + '("' + b64.encode(JSON.stringify(gfwlist.concat(additional))) + '"))'
 
 function proxy(protocol, server)
     if protocol is 'socks'
@@ -26,7 +28,7 @@ app.use ->*
         return
     @type = 'js'
     @body = abp
-        .replace('__PROXY__', proxy(@query.protocol, @query.server or '127.0.0.1:8118'))
+        .replace('__PROXY__', '"' + proxy(@query.protocol, @query.server or '127.0.0.1:8118') + '"')
         .replace('__RULES__', rules)
 
 app.listen(8899)
