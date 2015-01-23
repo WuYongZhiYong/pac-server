@@ -1,6 +1,13 @@
 require! {koa, fs}
 app = koa!
-pac = fs.readFileSync(__dirname + '/pac.js', 'utf-8')
+abp = fs.readFileSync(__dirname + '/abp.js', 'utf-8')
+gfwlist = (new Buffer(fs.readFileSync(__dirname + '/gfwlist.txt', 'utf-8'), 'base64'))
+    .toString('utf-8')
+    .split('\n')
+    .filter (line) ->
+        return line and line[0] isnt '!' and line[0] isnt '[';
+rules = JSON.stringify(gfwlist, null, '    ');
+
 function proxy(protocol, server)
     if protocol is 'socks'
         return "SOCKS #server"
@@ -13,6 +20,8 @@ app.use ->*
     unless @url.indexOf('/ap') > -1
         return
     @type = 'js'
-    @body = pac.replace('{{PROXY}}', proxy(@query.protocol, @query.server or '127.0.0.1:8118'))
+    @body = abp
+        .replace('__PROXY__', proxy(@query.protocol, @query.server or '127.0.0.1:8118'))
+        .replace('__RULES__', rules)
 
 app.listen(8899)
