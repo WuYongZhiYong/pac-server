@@ -6,7 +6,12 @@ gfwlist = (new Buffer(fs.readFileSync(__dirname + '/gfwlist.txt', 'utf-8'), 'bas
     .split('\n')
     .filter (line) ->
         return line and line[0] isnt '!' and line[0] isnt '[';
-rules = JSON.stringify(gfwlist, null, '    ');
+additional = fs.readFileSync(__dirname + '/additional_rules', 'utf-8')
+    .trim()
+    .toString('utf-8')
+    .split('\n')
+    .filter(Boolean)
+rules = JSON.stringify(gfwlist.concat(additional), null, '    ');
 
 function proxy(protocol, server)
     if protocol is 'socks'
