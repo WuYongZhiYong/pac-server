@@ -11,9 +11,8 @@ additional = fs.readFileSync(__dirname + '/additional_rules', 'utf-8')
     .toString('utf-8')
     .split('\n')
     .filter(Boolean)
-require! \./b64
 
-rules = 'JSON.parse(' + b64.decode.toString() + '("' + b64.encode(JSON.stringify(gfwlist.concat(additional))) + '"))'
+rules = JSON.stringify(gfwlist.concat(additional))
 
 function proxy(protocol, server)
     if protocol is 'socks'
